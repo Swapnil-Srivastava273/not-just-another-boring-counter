@@ -4,6 +4,7 @@ body,html{
     min-height: 100vh;
     overflow: hidden;
     position: relative;
+    font-family: sans-serif;
 }
 .lvl2{
     transform: scaleY(0);
@@ -23,15 +24,30 @@ body{
     z-index:4;
     pointer-events: none;
 }
-
+:root{
+    --fz:1em;
+}
+.score{
+    font-size: var(--fz);
+    color:white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.score span{
+    display: inline-block;
+}
 .board{
     position:absolute;
     background-color: rgb(0, 0, 0);
-    display: table;
+    /*display: table;*/
     text-align: center;
     vertical-align: middle;
     cursor: pointer;
     overflow: hidden;
+}
+.board *{
+    user-select: none;
 }
 .board img{
     width:100%;

@@ -4,7 +4,7 @@ const ctx=main.getContext("2d");
 const cos30=3**0.5/2;
 main.height=innerHeight;
 main.width=innerWidth;
-
+let counter=0;
 // TBD: Background gradients, boards, buttons
 // Gotta initiate all the towers
 // Animation random or coordinated?
@@ -22,10 +22,12 @@ let boardWidth=side*cos30*1.25;
 let boardHeight=boardWidth*94/128;
 let poleHeight=boardHeight;
 //let imgContent=0;
+document.querySelector(':root').style.setProperty("--fz",boardHeight/3+'px');
 let maxHGlobal=main.height-side*ROWS/2;
 let tInit=Date.now();
 let t=0;
 let lvl2boards=[];
+let scoreboards=[];
 main.style.zIndex=tempcols*ROWS+1;
 let clickFunc=()=>{
     
@@ -47,6 +49,11 @@ window.addEventListener("resize",e=>{ //without this resize=boom 💥
         },10);
     }
 });
+function updateScoreBoard(){
+    for(let b of scoreboards){
+        b.span2.innerText=counter;
+    }
+}
 class Boards{
     // x,y,element
     constructor(x,y,tower,imgContent){
@@ -58,16 +65,35 @@ class Boards{
         this.element.style.width=`${boardWidth}px`;
         this.element.style.height=`${boardHeight}px`;
         this.element.style.zIndex=tempcols-this.y;
-        this.img=document.createElement("img");
+        this.element.onclick=()=>{this.handleClick()};
         this.imgContent=imgContent;
-        this.img.src=images[this.imgContent];
-        if(this.imgContent==0){
-            this.img.classList.add("lvl2");
-            lvl2boards.push(this)
+        if(this.imgContent==4){
+            this.isScore=true;
         }
-        this.element.appendChild(this.img);
-        //this.element.style.visibility='hidden';
-        
+        if(this.isScore){
+            this.element.classList.add("score");
+            let span1=document.createElement("span");
+            span1.innerText="Counter:";
+            //let br=document.createElement("br");
+            let span2=document.createElement("span");
+            span2.innerText=counter;
+            this.element.appendChild(span1);
+            //this.element.appendChild(br);
+            this.element.appendChild(span2);
+            this.span1=span1;
+            this.span2=span2;
+            scoreboards.push(this);
+
+        }else{
+            this.img=document.createElement("img");
+            this.img.src=images[this.imgContent];
+            if(this.imgContent==0){
+                this.img.classList.add("lvl2");
+                lvl2boards.push(this)
+            }
+            this.element.appendChild(this.img);
+            //this.element.style.visibility='hidden';
+        }
         document.body.appendChild(this.element);
 
     }
@@ -84,6 +110,21 @@ class Boards{
         ctx.lineWidth=0.1;
         this.element.style.left=`${cx-boardWidth/2}px`;
         this.element.style.top=`${cy-poleHeight-boardHeight}px`
+    }
+    handleClick(){
+        if(this.imgContent==1){
+            counter++;
+            updateScoreBoard();
+        }else if(this.imgContent==2){
+            if(counter>0){
+                counter--;
+            }
+            updateScoreBoard();
+        }else if(this.imgContent==3){
+
+            counter=0;
+            updateScoreBoard();
+        }
     }
 
 }
@@ -150,9 +191,9 @@ for(let i=0;i<tempcols;i++){
             towers.push([]);
         }
         if((i+j)%2==0){
-            let tow=new Tower(maxHGlobal*Math.random(),i,j,Math.random()*Math.PI,1/(4+4*Math.random()));
+            let tow=new Tower(maxHGlobal*Math.random(),i,j,Math.random()*Math.PI,1/(4+6*Math.random()));
             if(Math.random()>0.5){
-                let bo=new Boards(i,j,tow,Math.floor(Math.random()*4));
+                let bo=new Boards(i,j,tow,Math.floor(Math.random()*5));
                 tow.item=bo;
             }
             towers[i].push(tow);
