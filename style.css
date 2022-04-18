@@ -21,14 +21,16 @@ body{
     top:0;
     left:0;
     z-index:4;
+    pointer-events: none;
 }
+
 .board{
     position:absolute;
     background-color: rgb(0, 0, 0);
     display: table;
     text-align: center;
     vertical-align: middle;
-    
+    cursor: pointer;
     overflow: hidden;
 }
 .board img{

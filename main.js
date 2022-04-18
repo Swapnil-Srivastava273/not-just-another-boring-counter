@@ -13,7 +13,8 @@ main.width=innerWidth;
 // 10 rows
 // If more than two should cover just less than half of the screen.
 // x direction should be perfectly fit.
-let tempside=main.height/10;
+const ROWS=12;
+let tempside=main.height/ROWS;
 let tempcols=Math.ceil(main.width/(tempside*cos30));
 let side=main.width/((tempcols-1)*cos30);
 let towers=[];
@@ -21,11 +22,11 @@ let boardWidth=side*cos30*1.25;
 let boardHeight=boardWidth*94/128;
 let poleHeight=boardHeight;
 //let imgContent=0;
-let maxHGlobal=main.height-side*5;
+let maxHGlobal=main.height-side*ROWS/2;
 let tInit=Date.now();
 let t=0;
 let lvl2boards=[];
-main.style.zIndex=tempcols*10+1;
+main.style.zIndex=tempcols*ROWS+1;
 let clickFunc=()=>{
     
     for(let b of lvl2boards){
@@ -144,7 +145,7 @@ class Tower{
 }
 for(let i=0;i<tempcols;i++){
     
-    for(let j=0;j<10;j++){
+    for(let j=0;j<ROWS;j++){
         if(j==0){
             towers.push([]);
         }
@@ -179,7 +180,7 @@ function run(){
     ctx.clearRect(0,0,main.width,main.height);
     let temp=Date.now();
     t=(temp-tInit)/1000;
-    for(let j=9;j>=0;j--){
+    for(let j=ROWS-1;j>=0;j--){
         for(let i=0;i<tempcols;i++){
             if(towers[i][j]){
                 towers[i][j].draw();
