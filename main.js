@@ -21,7 +21,11 @@ let boardWidth=side*cos30*1.25;
 let boardHeight=boardWidth*94/128;
 let poleHeight=boardHeight;
 let imgContent=0;
+let maxHGlobal=main.height-side*5;
+let tInit=Date.now();
+let t=0;
 main.style.zIndex=tempcols*10+1;
+
 class Boards{
     // x,y,element
     constructor(x,y,tower){
@@ -61,17 +65,22 @@ class Tower{
     // Height, position , animation , item.
     // Isometric angles : width fixed.
     // Draw, animate, z index adjustment, precise center location
-    constructor(height,x,y){
-        this.height=height;
+    constructor(maxH,x,y,phase,freq){
+        //this.height=height;
         // x and y assume origin at bottom left
         this.x=x;
         this.y=y;
+        this.maxH=maxH;
+        this.phase=phase;
+        this.freq=freq;
+        this.height=Math.sin(this.phase+Math.PI*this.freq*t)**4*this.maxH;
         this.item=null;
     }
     draw(){
+        this.height=Math.sin(this.phase+Math.PI*this.freq*t)**4*this.maxH;
         let cx=this.x*side*cos30,cy=main.height-this.y*side/2-this.height;
         // Top
-        debugger
+        //debugger
         ctx.lineWidth=0.1;
         ctx.beginPath();
         ctx.moveTo(cx-side*cos30,cy);
@@ -115,7 +124,7 @@ for(let i=0;i<tempcols;i++){
             towers.push([]);
         }
         if((i+j)%2==0){
-            let tow=new Tower(Math.random()*(main.height-side*5),i,j);
+            let tow=new Tower(maxHGlobal*Math.random(),i,j,Math.random()*Math.PI,1/(4+4*Math.random()));
             let bo=new Boards(i,j,tow);
             tow.item=bo;
             towers[i].push(tow);
@@ -138,11 +147,18 @@ rightG.addColorStop(0,'#ad612f');
 rightG.addColorStop(1,'#69320e');
 ctx.strokeStyle="#000";
 ctx.lineWidth=0.1;
-//Test Run
-for(let j=9;j>=0;j--){
-    for(let i=0;i<tempcols;i++){
-        if(towers[i][j]){
-            towers[i][j].draw();
+
+function run(){
+    ctx.clearRect(0,0,main.width,main.height);
+    let temp=Date.now();
+    t=(temp-tInit)/1000;
+    for(let j=9;j>=0;j--){
+        for(let i=0;i<tempcols;i++){
+            if(towers[i][j]){
+                towers[i][j].draw();
+            }
         }
     }
+    requestAnimationFrame(run);
 }
+run();

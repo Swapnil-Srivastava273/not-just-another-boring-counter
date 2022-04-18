@@ -4,6 +4,10 @@ body,html{
     min-height: 100vh;
     overflow: hidden;
 }
+body{
+    background-color: #fc9842;
+    background-image: linear-gradient(315deg, #fc9842 0%, #fe5f75 74%);
+}
 #main{
     position: absolute;
     top:0;
