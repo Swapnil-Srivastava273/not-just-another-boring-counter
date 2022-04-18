@@ -64,7 +64,7 @@ class Boards{
         this.element.classList.add("board");
         this.element.style.width=`${boardWidth}px`;
         this.element.style.height=`${boardHeight}px`;
-        this.element.style.zIndex=tempcols-this.y;
+        this.element.style.zIndex=ROWS-this.y;
         this.element.onclick=()=>{this.handleClick()};
         this.imgContent=imgContent;
         if(this.imgContent==4){
