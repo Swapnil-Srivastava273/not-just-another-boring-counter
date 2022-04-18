@@ -5,6 +5,13 @@ body,html{
     overflow: hidden;
     position: relative;
 }
+.lvl2{
+    transform: scaleY(0);
+    transition: transform 1.5s ease;
+}
+.lvl2-done{
+    transform:scaleY(1) !important;
+}
 body{
     background-color: #fc9842;
     background-image: linear-gradient(315deg, #fc9842 0%, #fe5f75 74%);
@@ -17,7 +24,7 @@ body{
 }
 .board{
     position:absolute;
-    background-color: white;
+    background-color: rgb(0, 0, 0);
     display: table;
     text-align: center;
     vertical-align: middle;

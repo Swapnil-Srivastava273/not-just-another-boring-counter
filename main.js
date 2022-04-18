@@ -20,15 +20,35 @@ let towers=[];
 let boardWidth=side*cos30*1.25;
 let boardHeight=boardWidth*94/128;
 let poleHeight=boardHeight;
-let imgContent=0;
+//let imgContent=0;
 let maxHGlobal=main.height-side*5;
 let tInit=Date.now();
 let t=0;
+let lvl2boards=[];
 main.style.zIndex=tempcols*10+1;
-
+let clickFunc=()=>{
+    
+    for(let b of lvl2boards){
+        b.img.classList.add("lvl2-done");
+    }
+    
+    document.removeEventListener("click",clickFunc);
+}
+document.addEventListener("click",clickFunc);
+let resizeIsRepeating=false; //for throttling otherwise canvas will update too much and blink
+window.addEventListener("resize",e=>{ //without this resize=boom 💥
+    if(!resizeIsRepeating){
+        resizeIsRepeating=true;
+        setTimeout(()=>{
+            resizeIsRepeating=false;
+            main.height=innerHeight;
+            main.width=innerWidth;
+        },10);
+    }
+});
 class Boards{
     // x,y,element
-    constructor(x,y,tower){
+    constructor(x,y,tower,imgContent){
         this.x=x;
         this.y=y;
         this.tower=tower;
@@ -38,7 +58,12 @@ class Boards{
         this.element.style.height=`${boardHeight}px`;
         this.element.style.zIndex=tempcols-this.y;
         this.img=document.createElement("img");
-        this.img.src=images[imgContent];
+        this.imgContent=imgContent;
+        this.img.src=images[this.imgContent];
+        if(this.imgContent==0){
+            this.img.classList.add("lvl2");
+            lvl2boards.push(this)
+        }
         this.element.appendChild(this.img);
         //this.element.style.visibility='hidden';
         
@@ -125,8 +150,10 @@ for(let i=0;i<tempcols;i++){
         }
         if((i+j)%2==0){
             let tow=new Tower(maxHGlobal*Math.random(),i,j,Math.random()*Math.PI,1/(4+4*Math.random()));
-            let bo=new Boards(i,j,tow);
-            tow.item=bo;
+            if(Math.random()>0.5){
+                let bo=new Boards(i,j,tow,Math.floor(Math.random()*4));
+                tow.item=bo;
+            }
             towers[i].push(tow);
             // towers[i].push(new Tower(0,i,j));
             
