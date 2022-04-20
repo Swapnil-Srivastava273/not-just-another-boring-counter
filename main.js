@@ -18,7 +18,7 @@ let tempside=main.height/ROWS;
 let tempcols=Math.ceil(main.width/(tempside*cos30));
 let side=main.width/((tempcols-1)*cos30);
 let towers=[];
-let boardWidth=side*cos30*1.25;
+let boardWidth=side*cos30*1.5;
 let boardHeight=boardWidth*94/128;
 let poleHeight=boardHeight;
 //let imgContent=0;
@@ -34,6 +34,7 @@ let clickFunc=()=>{
     for(let b of lvl2boards){
         b.img.classList.add("lvl2-done");
     }
+    document.getElementById("instructions").style.opacity=0;
     
     document.removeEventListener("click",clickFunc);
 }
@@ -49,9 +50,10 @@ window.addEventListener("resize",e=>{ //without this resize=boom 💥
         },10);
     }
 });
-function updateScoreBoard(){
+function updateScoreBoard(text){
     for(let b of scoreboards){
         b.span2.innerText=counter;
+        b.span1.innerText=text;
     }
 }
 class Boards{
@@ -114,16 +116,19 @@ class Boards{
     handleClick(){
         if(this.imgContent==1){
             counter++;
-            updateScoreBoard();
+            updateScoreBoard("Counter:");
         }else if(this.imgContent==2){
             if(counter>0){
                 counter--;
+                updateScoreBoard("Counter:");
+            }else{
+                updateScoreBoard("+ve only");
             }
-            updateScoreBoard();
+            
         }else if(this.imgContent==3){
 
             counter=0;
-            updateScoreBoard();
+            updateScoreBoard("Counter");
         }
     }
 
@@ -184,6 +189,23 @@ class Tower{
     }
 
 }
+let map={};
+if(tempcols>4){
+    let arr=[];
+    if(tempcols<6){
+        for(let i=0;i<tempcols;i++){
+            arr.push(i);
+        }
+    }else{
+        for(let i=1;i<tempcols-1;i++){
+            arr.push(i);
+        }
+    }
+    arr=arr.sort(() => 0.5 - Math.random()).slice(0,Math.min(arr.length,5));
+    for(let i=0;i<arr.length;i++){
+        map[arr[i]]=i;
+    }
+}
 for(let i=0;i<tempcols;i++){
     
     for(let j=0;j<ROWS;j++){
@@ -192,7 +214,10 @@ for(let i=0;i<tempcols;i++){
         }
         if((i+j)%2==0){
             let tow=new Tower(maxHGlobal*Math.random(),i,j,Math.random()*Math.PI,1/(4+6*Math.random()));
-            if(Math.random()>0.5){
+            if(j<2&&typeof map[i] != "undefined"){
+                let bo=new Boards(i,j,tow,map[i]);
+                tow.item=bo;
+            }else if(Math.random()>0.75){
                 let bo=new Boards(i,j,tow,Math.floor(Math.random()*5));
                 tow.item=bo;
             }
