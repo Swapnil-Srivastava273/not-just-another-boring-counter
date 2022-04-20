@@ -110,8 +110,9 @@ class Boards{
         ctx.clearRect(cx-boardWidth/2,cy-poleHeight-boardHeight,boardWidth,boardHeight);
         ctx.strokeRect(cx-boardWidth/2,cy-poleHeight-boardHeight,boardWidth,boardHeight);
         ctx.lineWidth=0.1;
-        this.element.style.left=`${cx-boardWidth/2}px`;
-        this.element.style.top=`${cy-poleHeight-boardHeight}px`
+        this.element.style.transform=`translateX(${cx-boardWidth/2}px) translateY(${cy-poleHeight-boardHeight}px)`
+        // this.element.style.left=`${cx-boardWidth/2}px`;
+        // this.element.style.top=`${cy-poleHeight-boardHeight}px`
     }
     handleClick(){
         if(this.imgContent==1){

@@ -31,11 +31,13 @@ body{
     position:absolute;
     opacity:1;
     color:white;
-    transition: opacity 10s cubic-bezier(1,-0.01,1,0);
+    transition: opacity 5s cubic-bezier(1,-0.01,1,0);
     top:0;
     padding:1em;
     box-sizing: border-box;
     max-width: 100%;
+    z-index: 9999999999;
+    pointer-events: none;
 }
 :root{
     --fz:1em;
@@ -64,6 +66,7 @@ body{
     vertical-align: middle;
     cursor: pointer;
     overflow: hidden;
+    transform: translateX(0) translateY(0);
 }
 .board *{
     user-select: none;
